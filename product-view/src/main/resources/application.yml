@@ -1,0 +1,84 @@
+spring:
+  application:
+    name: product-view
+  
+  thymeleaf:    mode: HTML
+    encoding: UTF-8
+    prefix: classpath:templates/
+    suffix: .html
+    cache: false
+  
+  devtools:    livereload:      enabled: true
+   eureka:  client:
+    register-with-eureka: true
+    fetch-registry: true
+    registry-fetch-interval-seconds: 5
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+
+
+ribbon:  eureka:    enabled: false
+    
+#  cloud:
+#    loadbalancer:
+#      retry:
+#        enabled: true
+#        retry-on-all-operations: true
+#        max-retries-on-next-service-instance: 10
+#        max-retries-on-same-service-instance: 0
+#        retry-on-all-operations: true
+#        backoff:
+#          enabled: true    
+        
+server:
+  port: ${PORT:8091}
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - "*"
+
+  #actuator를 통해 circuitbraker 상태를 확인하기 위해 설정    
+  health:    circuitbreakers:      enabled: true
+      
+  #actuator에서 디테일한 정보들을 확인하기 위해 설정
+  endpoint:
+    health:
+      show-details: always  
+
+resilience4j.retry:
+    instances:
+      testRetry:
+        #최대 시도 횟수
+        max-attempts: 5
+        #다음 시도까지 대기시간
+        wait-duration: 2000
+      testCircuitBreaker:
+        max-attempts: 3
+        wait-duration: 2000
+        
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      # actuator를 통해 circuitbraker 상태를 확인하기 위해 설정
+      registerHealthIndicator: true
+      # Circuit Breaker가 에러 비율 또 slow call 비율을 계산하기 전에 요구되는 최소한의 요청 수
+      minimumNumberOfCalls: 5
+      # 에러 비율 (퍼센트)로 해당 값 이상으로 에러 발생시 서킷이 Open 된다.
+      failureRateThreshold: 50
+      # 서킷의 상태가 Open에서 Half-open으로 변경되기 전에 Circuit Breaker가 기다리는 시간
+      waitDurationInOpenState: 10s
+  instances:
+    testCircuitBreaker:
+      baseConfig: default
+          
+resilience4j.timelimiter:  configs:
+    default: 
+      timeout-duration: 10000  instances:   testCircuitBreaker:
+     base-config: default            
+     
+ 
+ 
