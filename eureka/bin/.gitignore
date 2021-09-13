@@ -34,7 +34,8 @@ build/
 
 ### Maven 
 target/
-log/
+log/ss
+bin/
 
 ### Mac
 .DS_Store
