@@ -11,4 +11,10 @@ public interface ProductClient {
 	@GetMapping("/{productId}")
 	public String productInfo(@PathVariable String productId);
 
+	@GetMapping("/random/fail/{productId}")
+	public String randomFail(@PathVariable String productId);
+
+	@GetMapping("/random/delay/{productId}")
+	public String randomDelay(@PathVariable String productId);
+
 }
