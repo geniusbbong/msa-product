@@ -16,6 +16,7 @@ public class Response {
 	String ipaddress;
 	String productId;
 	Integer price;
+	Integer inventory;
 	Integer delay = 0;
 
 	public Response() {

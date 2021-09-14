@@ -4,13 +4,19 @@ import java.net.UnknownHostException;
 import java.util.Optional;
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import reactor.core.publisher.Mono;
+
 @RestController
 public class DataController {
+
+	@Autowired
+	DataService dataService;
 
 	public static Integer PORT;
 
@@ -78,6 +84,48 @@ public class DataController {
 		res.setPrice(price);
 
 		return res;
+	}
+
+	@GetMapping("/inventory/{id}")
+	public Mono<Response> getInventory(@PathVariable(value = "id") String productId) {
+		return dataService.getInfo(productId);
+	}
+
+	@GetMapping("/withinventory/{id}")
+	public Mono<Response> getWithInventory(@PathVariable(value = "id") String productId) {
+		return dataService.getInfo(productId).map(ret -> {
+			Random random = new Random();
+			random.setSeed(System.currentTimeMillis());
+
+			int price = 1000 + random.nextInt(100) * 10;
+			ret.setPrice(price);
+			return ret;
+		});
+	}
+
+	@GetMapping("/withinventory/random/fail/{id}")
+	public Mono<Response> getWithInventoryRandomFail(@PathVariable(value = "id") String productId) {
+		return dataService.getRandomFail(productId).map(ret -> {
+			Random random = new Random();
+			random.setSeed(System.currentTimeMillis());
+
+			int price = 1000 + random.nextInt(100) * 10;
+			ret.setPrice(price);
+			return ret;
+		});
+	}
+
+	@GetMapping(path = { "/withinventory/random/delay/{id}", "/withinventory/random/delay/{id}/{maxSec}" })
+	public Mono<Response> getWithInventoryRandomDelay(@PathVariable(value = "id") String productId,
+			@PathVariable(value = "maxSec", required = false) Optional<Integer> delay) {
+		return dataService.getRandomDelay(productId, delay.orElse(null)).map(ret -> {
+			Random random = new Random();
+			random.setSeed(System.currentTimeMillis());
+
+			int price = 1000 + random.nextInt(100) * 10;
+			ret.setPrice(price);
+			return ret;
+		});
 	}
 
 }
