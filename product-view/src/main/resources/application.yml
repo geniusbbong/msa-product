@@ -31,7 +31,7 @@ ribbon:  eureka:    enabled: false
 #          enabled: true    
         
 server:
-  port: ${PORT:8091}
+  port: ${PORT:8080}
 
 
 management:
