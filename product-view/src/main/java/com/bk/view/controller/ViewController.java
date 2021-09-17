@@ -9,12 +9,12 @@ public class ViewController {
 
 	@GetMapping(path = {"", "/index"} )
 	public String index() {
-		return "/index";
+		return "index";
 	}
 
 	@GetMapping("/product-view")
 	public String view() {
-		return "/product-view";
+		return "product-view";
 	}
 
 }
