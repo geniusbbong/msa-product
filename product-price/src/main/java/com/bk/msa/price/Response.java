@@ -18,6 +18,7 @@ public class Response {
 	Integer price;
 	Integer inventory;
 	Integer delay = 0;
+	String errorMsg = "";
 
 	public Response() {
 		this.serviceName = DataController.SERVICE_NAME;

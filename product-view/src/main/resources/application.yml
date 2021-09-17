@@ -14,7 +14,7 @@ spring:
     fetch-registry: true
     registry-fetch-interval-seconds: 5
     service-url:
-      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+      defaultZone: ${EUREKA_URL:http://211.253.24.172:8761/eureka/}
 
 
 ribbon:  eureka:    enabled: false
@@ -49,7 +49,8 @@ management:
     health:
       show-details: always  
 
-resilience4j.retry:
+resilience4j:
+  retry:    retry-aspect-order: 2
     instances:
       testRetry:
         #최대 시도 횟수
@@ -60,25 +61,27 @@ resilience4j.retry:
         max-attempts: 3
         wait-duration: 2000
         
-resilience4j.circuitbreaker:
-  configs:
-    default:
+
+  circuitbreaker:
+    circuit-breaker-aspect-order: 1
+    configs:
+      default:
       # actuator를 통해 circuitbraker 상태를 확인하기 위해 설정
-      registerHealthIndicator: true
+        registerHealthIndicator: true
       # Circuit Breaker가 에러 비율 또 slow call 비율을 계산하기 전에 요구되는 최소한의 요청 수
-      minimumNumberOfCalls: 5
+        minimumNumberOfCalls: 5
       # 에러 비율 (퍼센트)로 해당 값 이상으로 에러 발생시 서킷이 Open 된다.
-      failureRateThreshold: 50
+        failureRateThreshold: 50
       # 서킷의 상태가 Open에서 Half-open으로 변경되기 전에 Circuit Breaker가 기다리는 시간
-      waitDurationInOpenState: 10s
-  instances:
-    testCircuitBreaker:
-      baseConfig: default
+        waitDurationInOpenState: 10s
+    instances:
+      testCircuitBreaker:
+        baseConfig: default
           
-resilience4j.timelimiter:  configs:
-    default: 
-      timeout-duration: 10000  instances:   testCircuitBreaker:
-     base-config: default            
+  timelimiter:    configs:
+      default: 
+        timeout-duration: 10000    instances:     testCircuitBreaker:
+       base-config: default            
      
  
  

@@ -1,16 +1,20 @@
 
-eureka:
-  instance:    hostname: ${peer:peer1}.127.0.0.1.nip.io  client:    register-with-eureka: false
-    fetch-registry: false
-    service-url:      defaultZone: http://peer1.127.0.0.1.nip.io:8761/eureka #,http://peer2.127.0.0.1.nip.io:8762/eureka
-      
-  server:    wait-time-in-ms-when-sync-empty: 5  # 서버가 요청을 받기 전 대기할 초기 시간(ms) : 거의 대기 없음 (default 5분 : 상용에서는 모든 서비스가 등록 되길 기다리기 위해 5분 후 정보를 공유)
- 
 spring:  application:    name: Eureka-Server
 
 server:
   port: ${PORT:8761}
 
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      
+  server:
+    wait-time-in-ms-when-sync-empty: 5  # 서버가 요청을 받기 전 대기할 초기 시간(ms) : 거의 대기 없음 (default 5분 : 상용에서는 모든 서비스가 등록 되길 기다리기 위해 5분 후 정보를 공유)
 
 management:  endpoints:    web:      exposure:        include:        - "*"
         
