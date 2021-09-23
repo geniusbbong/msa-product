@@ -29,7 +29,7 @@ public class DataController {
 	@GetMapping("/test")
 	@StopWatch
 	public String test(@PathVariable String productId) {
-		return "test...";
+		return "test...trigger_test";
 	}
 
 	@GetMapping("/product/{productId}")
