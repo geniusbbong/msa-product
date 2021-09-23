@@ -31,12 +31,6 @@ public class DataController {
 	public String test(@PathVariable String productId) {
 		return "test...";
 	}
-	
-	@GetMapping("/test2")
-	@StopWatch
-	public String test2(@PathVariable String productId) {
-		return "test2...";
-	}
 
 	@GetMapping("/product/{productId}")
 	@StopWatch
