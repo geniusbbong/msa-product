@@ -11,7 +11,6 @@ import com.bk.view.service.PriceService;
 import com.bk.view.service.ReviewService;
 import com.bk.view.stopwatch.StopWatch;
 
-import io.github.resilience4j.retry.annotation.Retry;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -26,6 +25,18 @@ public class DataController {
 
 	@Autowired
 	ProductClient productClient;
+
+	@GetMapping("/test")
+	@StopWatch
+	public String test(@PathVariable String productId) {
+		return "test...";
+	}
+	
+	@GetMapping("/test2")
+	@StopWatch
+	public String test2(@PathVariable String productId) {
+		return "test2...";
+	}
 
 	@GetMapping("/product/{productId}")
 	@StopWatch
