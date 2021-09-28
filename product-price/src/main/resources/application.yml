@@ -22,6 +22,8 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: ${EUREKA_URL:http://211.253.24.172:8761/eureka/}
+  instance:
+    prefer-ip-address: true
 
 server:
   port: ${PORT:8080}
