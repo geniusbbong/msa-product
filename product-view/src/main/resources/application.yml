@@ -9,13 +9,22 @@ spring:
     cache: false
   
   devtools:    livereload:      enabled: true
+
+  sleuth:
+    opentracing:
+     enabled: true #default : true    sampler:      probability: 1.0
+      
+  zipkin:    base-url: http://211.253.24.172:10012/
+    #private ip
+    #base-url: http://172.27.1.7:9411/
+    locator:      discovery:        enabled: true
+
    eureka:  client:
     register-with-eureka: true
     fetch-registry: true
     registry-fetch-interval-seconds: 5
     service-url:
       defaultZone: ${EUREKA_URL:http://211.253.24.172:8761/eureka/}
-
 
 ribbon:  eureka:    enabled: false
     
@@ -50,16 +59,19 @@ management:
       show-details: always  
 
 resilience4j:
-  retry:    retry-aspect-order: 2
-    instances:
-      testRetry:
-        #최대 시도 횟수
-        max-attempts: 5
-        #다음 시도까지 대기시간
-        wait-duration: 2000
-      testCircuitBreaker:
+  retry:
+    configs:      default:
         max-attempts: 3
-        wait-duration: 2000
+        wait-duration: 2000    retry-aspect-order: 2
+    instances:
+      info:
+        base-config: default
+      review:
+        base-config: default
+      inventory:
+        base-config: default
+      price:
+        base-config: default
         
 
   circuitbreaker:
@@ -75,13 +87,17 @@ resilience4j:
       # 서킷의 상태가 Open에서 Half-open으로 변경되기 전에 Circuit Breaker가 기다리는 시간
         waitDurationInOpenState: 10s
     instances:
-      testCircuitBreaker:
-        baseConfig: default
-          
-  timelimiter:    configs:
-      default: 
-        timeout-duration: 10000    instances:     testCircuitBreaker:
-       base-config: default            
+      info:
+        base-config: default
+      review:
+        base-config: default
+      inventory:
+        base-config: default
+      price:
+        base-config: default
+  
+
+
      
  
  

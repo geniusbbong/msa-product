@@ -36,6 +36,11 @@ public class DataController {
 		return res;
 	}
 
+	@GetMapping("/fail/{id}")
+	public Response fail(@PathVariable(value = "id") String productId) throws Exception {
+		throw new Exception("Excpetion method called - " + productId);
+	}
+
 	@GetMapping(path = {"/random/delay/{id}", "/random/delay/{id}/{maxSec}"})
 	public Response randomdelay(@PathVariable(value = "id") String productId
 			, @PathVariable(value = "maxSec", required = false) Optional<Integer> maxSec) throws UnknownHostException, InterruptedException {

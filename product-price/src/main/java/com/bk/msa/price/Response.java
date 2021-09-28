@@ -14,6 +14,10 @@ public class Response {
 
 	String serviceName;
 	String ipaddress;
+
+	String serviceName2;
+	String ipaddress2;
+
 	String productId;
 	Integer price;
 	Integer inventory;

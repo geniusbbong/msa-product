@@ -2,6 +2,20 @@ spring:
   application:
     name: product-price
 
+  sleuth:
+    opentracing:
+     enabled: true #default : true
+    sampler:
+      probability: 1.0
+      
+  zipkin:
+    base-url: http://211.253.24.172:10012/
+    #private ip
+    #base-url: http://172.27.1.7:9411/
+    locator:
+      discovery:
+        enabled: true
+
 eureka:
   client:
     register-with-eureka: true
@@ -23,19 +37,19 @@ resilience4j:
         failure-rate-threshold: 50  # 에러 비율 (퍼센트)로 해당 값 이상으로 에러 발생시 서킷이 Open 된다.
         wait-duration-in-open-state: 10s  # 서킷의 상태가 Open에서 Half-open으로 변경되기 전에 Circuit Breaker가 기다리는 시간
     instances:
-      testCircuitbreaker:
+      inventory:
         base-config: default  
   
   bulkhead:
     instances:
-      testCircuitBreaker:
+      inventory:
         max-concurrent-calls: 25  # 허가된 동시 실행 수를 25로 지정
         max-wait-duration: 0  # 포화 상태의 Bulkhead에 진입하기 위해 block 되는 최대 시간, 값이 0이므로 바로 요청을 막는다.
 
   retry:
     retry-aspect-order: 2
     instances:
-      testCircuitBreaker:
+      inventory:
         max-attempts: 3 # 최대 재시도 수
         wait-duration:  1s # 재시도 사이에 고정된 시간
         #retry-exceptions:  # Empty 일 경우 모든 에러 클래스에 대해 재시도
@@ -44,7 +58,7 @@ resilience4j:
 
   timelimiter:
     instances:
-      testCircuitBreaker:
+      inventory:
         timeout-duration: 1s # 원격 서버로부터 해당 시간안에 응답이 오는 것을 제한
         cancel-running-future: true 
 

@@ -9,41 +9,29 @@
 </head>
 <body>
 	<div class="container px-4 py-5" id="featured-3">
-		<h2 class="pb-2 border-bottom">Columns with icons</h2>
+		<h2 class="pb-2 border-bottom">Product Service</h2>
 		<div class="row g-4 py-5 row-cols-1 row-cols-lg-2">
 			<div class="feature col">
 				<h2 id='name1'>Product</h2>
 				<p id='content1'>...</p>
-				<a href="#" class="icon-link"> Call to action <svg class="bi"
-						width="1em" height="1em">
-						<use xlink:href="#chevron-right"></use></svg>
-				</a>
+				<p id='info1'>???</p>
 			</div>
 			<div class="feature col">
 				<h2 id='name2'>Price</h2>
 				<p id='content2'>...</p>
-				<a href="#" class="icon-link"> Call to action <svg class="bi"
-						width="1em" height="1em">
-						<use xlink:href="#chevron-right"></use></svg>
-				</a>
+				<p id='info2'>???</p>
 			</div>
 		</div>
 		<div class="row g-4 py-5 row-cols-1 row-cols-lg-2">
 			<div class="feature col">
 				<h2 id='name3'>Review</h2>
 				<p id='content3'>...</p>
-				<a href="#" class="icon-link"> Call to action <svg class="bi"
-						width="1em" height="1em">
-						<use xlink:href="#chevron-right"></use></svg>
-				</a>
+				<p id='info3'>???</p>
 			</div>
 			<div class="feature col">
 				<h2 id='name4'>Inventory</h2>
 				<p id='content4'>...</p>
-				<a href="#" class="icon-link"> Call to action <svg class="bi"
-						width="1em" height="1em">
-						<use xlink:href="#chevron-right"></use></svg>
-				</a>
+				<p id='info4'>???</p>
 			</div>
 		</div>
 	</div>
@@ -51,52 +39,67 @@
 <script>
 	$(function() {
 
-		$.ajax({ url: "/data/product/ABC", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+		$.ajax({ url: "/data/info/ABC", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
 			//data: { name: "홍길동" }, // HTTP 요청과 함께 서버로 보낼 데이터
 			method: "GET", // HTTP 요청 메소드(GET, POST 등)
-			dataType: "text" // 서버에서 보내줄 데이터의 타입
+			dataType: "json" // 서버에서 보내줄 데이터의 타입
 		}) // HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
-		.done(function(text) {
-			$("#content1").text(text);
+		.done(function(result) {
+			if(!result.info)
+				$("#content1").text(result.errorMsg);
+			else
+				$("#content1").text(result.info);
+
+			$("#info1").text(result.ipaddress);
+
 		}) // HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
-		.fail(function(xhr, status, errorThrown) {
-			$("#content1").text("fail.");
+		.fail(function(request, status, errorThrown) {
+			$("#content1").text("code:"+request.status);
 		}) //
 
-		$.ajax({ url: "/data/price/ABC", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
+		$.ajax({ url: "/data/price/inventory/ABC", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
 			//data: { name: "홍길동" }, // HTTP 요청과 함께 서버로 보낼 데이터
 			method: "GET", // HTTP 요청 메소드(GET, POST 등)
-			dataType: "text" // 서버에서 보내줄 데이터의 타입
+			dataType: "json" // 서버에서 보내줄 데이터의 타입
 		}) // HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
-		.done(function(text) {
-			$("#content2").text(text);
+		.done(function(result) {
+			console.log(result)
+			if(!result.price)
+				$("#content2").text(result.errorMsg);
+			else
+				$("#content2").text(result.price);
+
+			if(!result.inventory)
+				$("#content4").text(result.errorMsg);
+			else
+				$("#content4").text(result.inventory);
+
+			$("#info2").text(result.ipaddress2);
+			$("#info4").text(result.ipaddress);
+
 		}) // HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
-		.fail(function(xhr, status, errorThrown) {
-			$("#content3").text("fail.");
+		.fail(function(request, status, errorThrown) {
+			$("#content2").text("code:"+request.status);
+			$("#content4").text("code:"+request.status);
 		}) //
 
 		$.ajax({ url: "/data/review/ABC", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
 			//data: { name: "홍길동" }, // HTTP 요청과 함께 서버로 보낼 데이터
 			method: "GET", // HTTP 요청 메소드(GET, POST 등)
-			dataType: "text" // 서버에서 보내줄 데이터의 타입
+			dataType: "json" // 서버에서 보내줄 데이터의 타입
 		}) // HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
-		.done(function(text) {
-			$("#content3").text(text);
-		}) // HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
-		.fail(function(xhr, status, errorThrown) {
-			$("#content3").text("fail.");
-		}) //
+		.done(function(result) {
+			console.log(result)
 
-		$.ajax({ url: "/data/inventory/ABC", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
-			//data: { name: "홍길동" }, // HTTP 요청과 함께 서버로 보낼 데이터
-			method: "GET", // HTTP 요청 메소드(GET, POST 등)
-			dataType: "text" // 서버에서 보내줄 데이터의 타입
-		}) // HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
-		.done(function(text) {
-			$("#content4").text(text);
+			if(!result.review)
+				$("#content3").text(result.errorMsg);
+			else
+				$("#content3").text(result.review);
+
+			$("#info3").text(result.ipaddress);
 		}) // HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
-		.fail(function(xhr, status, errorThrown) {
-			$("#content4").text("fail.");
+		.fail(function(request, status, errorThrown) {
+			$("#content3").text("code:"+request.status);
 		}) //
 
 	});

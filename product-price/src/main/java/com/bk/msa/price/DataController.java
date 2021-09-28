@@ -1,5 +1,6 @@
 package com.bk.msa.price;
 
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Optional;
 import java.util.Random;
@@ -45,6 +46,11 @@ public class DataController {
 		res.setPrice(price);
 
 		return res;
+	}
+
+	@GetMapping("/fail/{id}")
+	public Response fail(@PathVariable(value = "id") String productId) throws Exception {
+		throw new Exception("Excpetion method called - " + productId);
 	}
 
 	@GetMapping(path = { "/random/delay/{id}", "/random/delay/{id}/{maxSec}" })
@@ -99,8 +105,40 @@ public class DataController {
 
 			int price = 1000 + random.nextInt(100) * 10;
 			ret.setPrice(price);
+
+			ret.setServiceName2(SERVICE_NAME);
+
+			try {
+				String ip = InetAddress.getLocalHost().getHostAddress();
+				ret.setIpaddress2(String.format("%s:%d", ip, DataController.PORT));
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
+
 			return ret;
-		});
+		}).onErrorResume(e -> Mono.just(fallback(productId, e.getMessage())));
+	}
+
+	@GetMapping("/withinventory/fail/{id}")
+	public Mono<Response> getWithInventoryF(@PathVariable(value = "id") String productId) {
+		return dataService.getFail(productId).map(ret -> {
+			Random random = new Random();
+			random.setSeed(System.currentTimeMillis());
+
+			int price = 1000 + random.nextInt(100) * 10;
+			ret.setPrice(price);
+
+			ret.setServiceName2(SERVICE_NAME);
+
+			try {
+				String ip = InetAddress.getLocalHost().getHostAddress();
+				ret.setIpaddress2(String.format("%s:%d", ip, DataController.PORT));
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
+
+			return ret;
+		}).onErrorResume(e -> Mono.just(fallback(productId, e.getMessage())));
 	}
 
 	@GetMapping("/withinventory/random/fail/{id}")
@@ -111,8 +149,18 @@ public class DataController {
 
 			int price = 1000 + random.nextInt(100) * 10;
 			ret.setPrice(price);
+
+			ret.setServiceName2(SERVICE_NAME);
+
+			try {
+				String ip = InetAddress.getLocalHost().getHostAddress();
+				ret.setIpaddress2(String.format("%s:%d", ip, DataController.PORT));
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
+
 			return ret;
-		});
+		}).onErrorResume(e -> Mono.just(fallback(productId, e.getMessage())));
 	}
 
 	@GetMapping(path = { "/withinventory/random/delay/{id}", "/withinventory/random/delay/{id}/{maxSec}" })
@@ -124,8 +172,31 @@ public class DataController {
 
 			int price = 1000 + random.nextInt(100) * 10;
 			ret.setPrice(price);
+
+			ret.setServiceName2(SERVICE_NAME);
+
+			try {
+				String ip = InetAddress.getLocalHost().getHostAddress();
+				ret.setIpaddress2(String.format("%s:%d", ip, DataController.PORT));
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
+
 			return ret;
-		});
+		}).onErrorResume(e -> Mono.just(fallback(productId, e.getMessage())));
+	}
+
+	public Response fallback(String productId, String errMsg){
+		Random random = new Random();
+		random.setSeed(System.currentTimeMillis());
+
+		int price = 1000 + random.nextInt(100) * 10;
+		Response res = new Response();
+		res.setProductId(productId);
+		res.setPrice(price);
+		res.setErrorMsg(errMsg);
+
+		return res;
 	}
 
 }

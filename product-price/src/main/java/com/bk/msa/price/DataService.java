@@ -16,14 +16,23 @@ import reactor.core.publisher.Mono;
 @Service
 public class DataService {
 
-	private static final String TEST_CIRCUIT_BREKER = "testCircuitBreaker";
+	private static final String TEST_CIRCUIT_BREKER = "inventory";
 
 	@Autowired
 	WebClient.Builder webClientBuilder;
 
+	@Retry(name = TEST_CIRCUIT_BREKER)
+	@CircuitBreaker(name = TEST_CIRCUIT_BREKER)
 	public Mono<Response> getInfo(String productId) {
 
 		return webClientBuilder.baseUrl("http://product-inventory").build().get().uri("/" + productId).retrieve()
+				.bodyToMono(Response.class);
+	}
+
+	@CircuitBreaker(name = TEST_CIRCUIT_BREKER)
+	public Mono<Response> getFail(String productId) {
+
+		return webClientBuilder.baseUrl("http://product-inventory").build().get().uri("/fail/" + productId).retrieve()
 				.bodyToMono(Response.class);
 	}
 
@@ -46,11 +55,6 @@ public class DataService {
 
 		return webClientBuilder.baseUrl("http://product-inventory/random/delay").build().get().uri(sb.toString())
 				.retrieve()
-				.onStatus(httpstatus -> httpstatus != HttpStatus.OK, clientResponse -> {
-					return clientResponse.createException()
-					         .flatMap(it -> Mono.error(new RuntimeException("code : " + clientResponse.statusCode())));
-					}
-				)
 				.bodyToMono(Response.class);
 	}
 

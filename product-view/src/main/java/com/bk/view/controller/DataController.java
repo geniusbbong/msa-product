@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bk.view.ProductClient;
+import com.bk.view.service.InfoService;
+import com.bk.view.service.InventoryService;
 import com.bk.view.service.PriceService;
+import com.bk.view.service.Response;
 import com.bk.view.service.ReviewService;
 import com.bk.view.stopwatch.StopWatch;
 
@@ -18,13 +21,19 @@ import reactor.core.publisher.Mono;
 public class DataController {
 
 	@Autowired
-	PriceService webClientService;
+	PriceService priceService;
 
 	@Autowired
-	ReviewService templateService;
+	ReviewService reviewService;
 
 	@Autowired
-	ProductClient productClient;
+	InfoService infoService;
+
+	@Autowired
+	InventoryService inventoryService;
+
+	@Autowired
+	ProductClient productInfoFClientnet;
 
 	@GetMapping("/test")
 	@StopWatch
@@ -32,40 +41,127 @@ public class DataController {
 		return "trigger_test...";
 	}
 
-	@GetMapping("/product/{productId}")
+	@GetMapping("/info/{productId}")
 	@StopWatch
-	public String productInfo(@PathVariable String productId) {
-		return productClient.productInfo(productId);
+	public Response getInfo(@PathVariable String productId) {
+		return productInfoFClientnet.get(productId);
 	}
 
-	@GetMapping("/price/{productId}")
+	@GetMapping("/info/fail/{productId}")
 	@StopWatch
-	public Mono<String>price1(@PathVariable String productId) {
-		return webClientService.price(productId);
+	public Response getInfoF(@PathVariable String productId) {
+		return productInfoFClientnet.getFail(productId);
 	}
 
-	@GetMapping("/price2/{productId}")
+	@GetMapping("/info/random/fail/{productId}")
 	@StopWatch
-	public String price2(@PathVariable String productId) {
-		return webClientService.priceBlock(productId);
+	public Response getInfoRF(@PathVariable String productId) {
+		return productInfoFClientnet.getRandomFail(productId);
 	}
 
-	@GetMapping("/retry/price/{productId}")
+	@GetMapping("/info/random/delay/{productId}")
 	@StopWatch
-	public Mono<String> retry_price(@PathVariable String productId) {
-		return webClientService.priceRetry(productId);
+	public Response getInfoRD(@PathVariable String productId) {
+		return productInfoFClientnet.getRandomDelay(productId);
 	}
 
 	@GetMapping("/review/{productId}")
 	@StopWatch
-	public String review(@PathVariable String productId){
-		return templateService.review(productId);
+	public Response getReview(@PathVariable String productId){
+		return reviewService.get(productId);
+	}
+
+	@GetMapping("/review/fail/{productId}")
+	@StopWatch
+	public Response getReviewF(@PathVariable String productId){
+		return reviewService.getFail(productId);
+	}
+
+	@GetMapping("/review/random/fail/{productId}")
+	@StopWatch
+	public Response getReviewRF(@PathVariable String productId){
+		return reviewService.randomFail(productId);
+	}
+
+	@GetMapping("/review/random/delay/{productId}")
+	@StopWatch
+	public Response getReviewRD(@PathVariable String productId){
+		return reviewService.randomDelay(productId, null);
 	}
 
 	@GetMapping("/inventory/{productId}")
 	@StopWatch
-	public String inventory(@PathVariable String productId) {
-		return templateService.inventory(productId);
+	public Response getInventory(@PathVariable String productId){
+		return inventoryService.get(productId);
 	}
+
+	@GetMapping("/inventory/fail/{productId}")
+	@StopWatch
+	public Response getInventoryF(@PathVariable String productId){
+		return inventoryService.getFail(productId);
+	}
+
+	@GetMapping("/inventory/random/fail/{productId}")
+	@StopWatch
+	public Response getInventoryRF(@PathVariable String productId){
+		return inventoryService.randomFail(productId);
+	}
+
+	@GetMapping("/inventory/random/delay/{productId}")
+	@StopWatch
+	public Response getInventoryRD(@PathVariable String productId){
+		return inventoryService.randomDelay(productId, null);
+	}
+
+
+	@GetMapping("/price/{productId}")
+	@StopWatch
+	public Response getPrice(@PathVariable String productId) {
+		return priceService.get(productId);
+	}
+
+	@GetMapping("/price/fail/{productId}")
+	@StopWatch
+	public Response getPriceF(@PathVariable String productId) {
+		return priceService.getFail(productId);
+	}
+
+	@GetMapping("/price/random/fail/{productId}")
+	@StopWatch
+	public Response getPriceRF(@PathVariable String productId){
+		return priceService.getRandomFail(productId);
+	}
+
+	@GetMapping("/price/random/delay/{productId}")
+	@StopWatch
+	public Response getPriceRD(@PathVariable String productId){
+		return priceService.getRandomDelay(productId, null);
+	}
+
+	@GetMapping("/price/inventory/{productId}")
+	@StopWatch
+	public Response getPriceInventory(@PathVariable String productId) {
+		return priceService.getWithInventory(productId);
+	}
+
+	@GetMapping("/price/inventory/fail/{productId}")
+	@StopWatch
+	public Response getPriceInventoryF(@PathVariable String productId){
+		return priceService.getWithInventoryFail(productId);
+	}
+
+	@GetMapping("/price/inventory/random/fail/{productId}")
+	@StopWatch
+	public Response getPriceInventoryRF(@PathVariable String productId){
+		return priceService.getWithInventoryRandomFail(productId);
+	}
+
+	@GetMapping("/price/inventory/random/delay/{productId}")
+	@StopWatch
+	public Response getPriceInventoryRD(@PathVariable String productId){
+		return priceService.getWithInventoryRandomDelay(productId, null);
+	}
+
+
 
 }
