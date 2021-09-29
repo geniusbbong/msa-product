@@ -1,5 +1,5 @@
 server:
-  port: 8010
+  port: 8080
 
 eureka:
   instance:
@@ -63,7 +63,7 @@ spring:
         - RewritePath=/info/(?<segment>.*), /$\{segment}
         
       - id: review-service
-        uri: lb://product-ç
+        uri: lb://product-review
         predicates:
         - Path=/review/**
         filters:
