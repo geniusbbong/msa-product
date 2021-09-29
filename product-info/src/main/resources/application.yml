@@ -15,6 +15,16 @@ spring:
     locator:
       discovery:
         enabled: true
+
+  cloud:
+    inetutils:
+      ignored-interfaces:
+      - docker0
+      - veth.*
+      preferred-networks:
+      - 172.27
+      use-only-site-local-interfaces: true
+
             
 eureka:
   client:
