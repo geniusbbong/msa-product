@@ -1,5 +1,14 @@
 
 spring:  application:    name: Eureka-Server
+    
+  cloud:
+    inetutils:
+      ignored-interfaces:
+      - docker0
+      - veth.*
+      preferred-networks:
+      - 172.27
+      - 211.253
 
 server:
   port: ${PORT:8761}
