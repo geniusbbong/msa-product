@@ -37,7 +37,7 @@ public class DataController {
 
 	@GetMapping("/test")
 	@StopWatch
-	public String test(@PathVariable String productId) {
+	public String test() {
 		return "trigger_test...";
 	}
 

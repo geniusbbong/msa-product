@@ -16,15 +16,6 @@ spring:
       discovery:
         enabled: true
 
-  cloud:
-    inetutils:
-      ignored-interfaces:
-      - docker0
-      - veth.*
-      preferred-networks:
-      - 172.27
-      - 211.253
-
 eureka:
   client:
     register-with-eureka: true

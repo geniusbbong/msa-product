@@ -10,14 +10,7 @@ spring:
   
   devtools:    livereload:      enabled: true
 
-  sleuth:
-    opentracing:
-     enabled: true #default : true    sampler:      probability: 1.0
-      
-  zipkin:    base-url: http://211.253.24.172:10012/
-    #private ip
-    #base-url: http://172.27.1.7:9411/
-    locator:      discovery:        enabled: true
+
 
    eureka:  client:
     register-with-eureka: true
@@ -42,21 +35,26 @@ ribbon:  eureka:    enabled: false
 server:
   port: ${PORT:8080}
 
-
 management:
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        '[http.server.requests]': true
+        '[resilience4j.circuitbreaker.calls]': true
   endpoints:
     web:
       exposure:
         include:
         - "*"
-
   #actuator를 통해 circuitbraker 상태를 확인하기 위해 설정    
   health:    circuitbreakers:      enabled: true
-      
+     
   #actuator에서 디테일한 정보들을 확인하기 위해 설정
   endpoint:
     health:
-      show-details: always  
+      show-details: always      prometheus:      enabled: true
 
 resilience4j:
   retry:
