@@ -1,0 +1,90 @@
+server:
+  port: 8010
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_URL:http://211.253.24.172:8761/eureka/}
+      
+spring:
+  application:
+    name: product-gateway
+  
+  sleuth:
+    opentracing:
+     enabled: true #default : true
+    sampler:
+      probability: 1.0
+      
+  zipkin:
+    base-url: http://211.253.24.172:10012/
+    #private ip
+    #base-url: http://172.27.1.7:9411/
+    locator:
+      discovery:
+        enabled: true
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true 
+      routes:
+      - id: view-service
+        uri: lb://product-view
+        predicates:
+        - Path=/view/**
+        filters:
+        - RewritePath=/view/(?<segment>.*), /$\{segment}
+      
+      - id: inventory-service
+        uri: lb://product-inventory
+        predicates:
+        - Path=/inventory/**
+        filters:
+        - RewritePath=/inventory/(?<segment>.*), /$\{segment}
+     
+      - id: price-service
+        uri: lb://product-price
+        predicates:
+        - Path=/price/**
+        filters:
+        - RewritePath=/price/(?<segment>.*), /$\{segment}
+      
+      - id: info-service
+        uri: lb://product-info
+        predicates:
+        - Path=/info/**
+        filters:
+        - RewritePath=/info/(?<segment>.*), /$\{segment}
+        
+      - id: review-service
+        uri: lb://product-ç
+        predicates:
+        - Path=/review/**
+        filters:
+        - RewritePath=/review/(?<segment>.*), /$\{segment}
+        
+      
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - "gateway"
+    
+  #actuator에서 디테일한 정보들을 확인하기 위해 설정
+  endpoint:
+    gateway:
+      enabled: true
+      
+
+  
+      
+      
+ 
+      
