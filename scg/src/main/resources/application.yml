@@ -41,6 +41,21 @@ spring:
         filters:
         - RewritePath=/view/(?<segment>.*), /$\{segment}
       
+      - id: view-service-js
+        uri: lb://product-view
+        predicates:
+        - Path=/js/**
+        
+      - id: view-service-css
+        uri: lb://product-view
+        predicates:
+        - Path=/css/**
+        
+      - id: view-service-data
+        uri: lb://product-view
+        predicates:
+        - Path=/data/**
+      
       - id: inventory-service
         uri: lb://product-inventory
         predicates:
